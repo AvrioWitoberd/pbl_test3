@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../auth/login_screen.dart';
 import '../auth/role_selection_screen.dart';
 import '../../providers/auth_provider.dart';
+import '../main_navigation.dart';
 import 'privacy_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -36,7 +37,7 @@ class HomeScreen extends StatelessWidget {
               context.read<AuthProvider>().logout();
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (_) => const RoleSelectionScreen()),
+                MaterialPageRoute(builder: (_) => const MainNavigationScreen(initialIndex: 0)),
                 (route) => false,
               );
             },

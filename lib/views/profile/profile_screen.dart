@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../providers/auth_provider.dart';
 import '../auth/role_selection_screen.dart';
+import '../main_navigation.dart';
 import '../home/privacy_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -58,7 +59,9 @@ class ProfileScreen extends StatelessWidget {
     authProvider.logout();
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (_) => const RoleSelectionScreen()),
+      MaterialPageRoute(
+        builder: (_) => const MainNavigationScreen(initialIndex: 0),
+      ),
       (route) => false,
     );
   }
