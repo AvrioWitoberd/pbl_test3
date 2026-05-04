@@ -171,8 +171,35 @@ class HomeScreen extends StatelessWidget {
                 builder: (context, provider, child) {
                   final kosList = provider.filteredKosList;
                   if (kosList.isEmpty) {
-                    return const Center(
-                      child: Text('Tidak ada Kos yang sesuai'),
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.search_off_rounded,
+                            size: 72,
+                            color: Colors.grey[350],
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Kos tidak ditemukan',
+                            style: GoogleFonts.inter(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey[500],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Coba ubah kata kunci atau filter pencarian',
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Colors.grey[400],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     );
                   }
                   return ListView.builder(

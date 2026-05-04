@@ -92,8 +92,34 @@ class BlogScreen extends StatelessWidget {
               builder: (context, provider, child) {
                 final blogs = provider.filteredBlogs;
                 if (blogs.isEmpty) {
-                  return const Center(
-                    child: Text("Tidak ada berita ditemukan."),
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.article_outlined,
+                          size: 72,
+                          color: Colors.grey[350],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Berita tidak ditemukan',
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[500],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Coba ubah kata kunci atau kategori',
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 }
                 return ListView.builder(
