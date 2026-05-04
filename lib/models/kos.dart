@@ -3,7 +3,8 @@ class Kos {
   final String name;
   final String location;
   final double price;
-  final double rating;
+  double rating;
+  int ratingCount;
   final String image;
   final String imageUrl;
   final String description;
@@ -16,6 +17,7 @@ class Kos {
     required this.location,
     required this.price,
     required this.rating,
+    this.ratingCount = 0,
     required this.image,
     String? imageUrl,
     this.description = '',

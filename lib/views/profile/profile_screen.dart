@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../providers/auth_provider.dart';
 import '../auth/role_selection_screen.dart';
+import '../auth/login_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -63,6 +65,12 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+    
+    if (!authProvider.isLoggedIn) {
+      return const LoginScreen();
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF7F8FA),
       appBar: AppBar(
@@ -136,7 +144,13 @@ class ProfileScreen extends StatelessWidget {
                   _buildMenuItem(
                     icon: Icons.help_outline_rounded,
                     title: "Pusat Bantuan",
-                    onTap: () {},
+                    onTap: () async {
+                      final Uri url = Uri.parse(
+                          'https://wa.me/6285784649183?text=${Uri.encodeComponent("Halo admin, saya butuh bantuan terkait aplikasi My Kos")}');
+                      if (!await launchUrl(url)) {
+                        debugPrint('Could not launch $url');
+                      }
+                    },
                   ),
                   const Divider(height: 1, indent: 56, endIndent: 16),
                   _buildMenuItem(

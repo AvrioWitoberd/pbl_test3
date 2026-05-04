@@ -4,6 +4,7 @@ import '../data/dummy_data.dart';
 
 class KosProvider with ChangeNotifier {
   List<String> _favoriteKosIds = [];
+  Map<String, List<int>> ratingsData = {};
 
   // Filter state (used by home_screen & filter_bottom_sheet)
   String _selectedLocation = '';
@@ -74,5 +75,22 @@ class KosProvider with ChangeNotifier {
     _selectedPriceRanges = [];
     _searchQuery = '';
     notifyListeners();
+  }
+
+  void submitRating(String kosId, int rating) {
+    if (!ratingsData.containsKey(kosId)) {
+      ratingsData[kosId] = [];
+    }
+    ratingsData[kosId]!.add(rating);
+
+    final ratings = ratingsData[kosId]!;
+    final average = ratings.reduce((a, b) => a + b) / ratings.length;
+
+    final kosIndex = dummyKosList.indexWhere((k) => k.id == kosId);
+    if (kosIndex != -1) {
+      dummyKosList[kosIndex].rating = average;
+      dummyKosList[kosIndex].ratingCount = ratings.length;
+      notifyListeners();
+    }
   }
 }

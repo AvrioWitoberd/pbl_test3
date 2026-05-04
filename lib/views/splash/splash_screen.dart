@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../providers/auth_provider.dart';
-import '../auth/role_selection_screen.dart';
 import '../main_navigation.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -20,22 +17,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _navigateToNext() async {
     await Future.delayed(const Duration(seconds: 2));
-
     if (!mounted) return;
-
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-
-    if (authProvider.isLoggedIn) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-      );
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
-      );
-    }
+    // Browse-first: always go to Home. Login is only required for
+    // specific guarded actions (favorite, rating, booking).
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
+    );
   }
 
   @override

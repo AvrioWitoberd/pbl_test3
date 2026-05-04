@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/kos.dart';
+import '../providers/auth_provider.dart';
 import '../providers/kos_provider.dart';
+import '../views/auth/login_screen.dart';
 import '../views/home/kos_detail_screen.dart';
 
 class KosCard extends StatelessWidget {
@@ -86,10 +88,27 @@ class KosCard extends StatelessWidget {
                           ),
                         ),
                         Consumer<KosProvider>(
-                          builder: (context, provider, child) {
-                            final isFav = provider.isFavorite(kos.id);
+                          builder: (context, kosProvider, child) {
+                            final isFav = kosProvider.isFavorite(kos.id);
                             return GestureDetector(
-                              onTap: () => provider.toggleFavorite(kos.id),
+                              onTap: () {
+                                final auth = Provider.of<AuthProvider>(
+                                  context,
+                                  listen: false,
+                                );
+                                // Guard: only logged-in users can favorite
+                                auth.performGuardedAction(
+                                  action: () => kosProvider.toggleFavorite(kos.id),
+                                  onUnauthenticated: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => const LoginScreen(),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
                               child: Icon(
                                 isFav ? Icons.favorite : Icons.favorite_border,
                                 color: isFav ? Colors.red : Colors.grey[400],

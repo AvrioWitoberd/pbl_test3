@@ -1,43 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/kos.dart';
+import '../../providers/auth_provider.dart';
+import '../../providers/kos_provider.dart';
+import '../auth/login_screen.dart';
 
-class KosDetailScreen extends StatelessWidget {
+class KosDetailScreen extends StatefulWidget {
   final Kos kos;
 
   const KosDetailScreen({Key? key, required this.kos}) : super(key: key);
 
-  Future<void> _hubungiPemilik() async {
-    final Uri url = Uri.parse('https://wa.me/6281234567890');
+  @override
+  State<KosDetailScreen> createState() => _KosDetailScreenState();
+}
+
+class _KosDetailScreenState extends State<KosDetailScreen> {
+  int _selectedRating = 0;
+
+  Future<void> _pesanSekarang(BuildContext context) async {
+    final Uri url = Uri.parse(
+        'https://wa.me/628123456789?text=${Uri.encodeComponent("Saya tertarik dengan kos ini")}');
     if (!await launchUrl(url)) {
       debugPrint('Could not launch $url');
     }
   }
 
-  void _pesanSekarang(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(
-          "Sukses",
-          style: GoogleFonts.inter(fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          "Terimakasih atas ulasan yang diberikan",
-          style: GoogleFonts.inter(),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(
-              "Tutup",
-              style: GoogleFonts.inter(color: const Color(0xFF0D3B66)),
-            ),
-          ),
-        ],
-      ),
+  void _submitRating() {
+    if (_selectedRating == 0) return;
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider.performGuardedAction(
+      action: () {
+        Provider.of<KosProvider>(context, listen: false).submitRating(
+          widget.kos.id,
+          _selectedRating,
+        );
+        setState(() {
+          _selectedRating = 0;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Terima kasih atas ulasan Anda!')),
+        );
+      },
+      onUnauthenticated: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      },
     );
   }
 
@@ -70,7 +83,7 @@ class KosDetailScreen extends StatelessWidget {
           children: [
             // Hero Image
             Image.network(
-              kos.imageUrl,
+              widget.kos.imageUrl,
               width: double.infinity,
               height: 250,
               fit: BoxFit.cover,
@@ -94,7 +107,7 @@ class KosDetailScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          kos.name,
+                          widget.kos.name,
                           style: GoogleFonts.inter(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -107,7 +120,7 @@ class KosDetailScreen extends StatelessWidget {
                           const Icon(Icons.star, color: Colors.amber, size: 20),
                           const SizedBox(width: 4),
                           Text(
-                            kos.rating.toString(),
+                            '${widget.kos.rating.toStringAsFixed(1)} (${widget.kos.ratingCount} ulasan)',
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -128,7 +141,7 @@ class KosDetailScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        kos.location,
+                        widget.kos.location,
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           color: Colors.grey[600],
@@ -151,7 +164,7 @@ class KosDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    kos.description,
+                    widget.kos.description,
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       color: Colors.black87,
@@ -174,7 +187,7 @@ class KosDetailScreen extends StatelessWidget {
                   Wrap(
                     spacing: 8.0,
                     runSpacing: 8.0,
-                    children: kos.facilities.map((fac) {
+                    children: widget.kos.facilities.map((fac) {
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
@@ -205,6 +218,61 @@ class KosDetailScreen extends StatelessWidget {
                         ),
                       );
                     }).toList(),
+                  ),
+
+                  const SizedBox(height: 24),
+                  const Divider(),
+                  const SizedBox(height: 16),
+
+                  // Rating Section
+                  Text(
+                    "Beri Rating",
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Row(
+                        children: List.generate(5, (index) {
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedRating = index + 1;
+                              });
+                            },
+                            child: Icon(
+                              index < _selectedRating
+                                  ? Icons.star
+                                  : Icons.star_border,
+                              color: Colors.amber,
+                              size: 32,
+                            ),
+                          );
+                        }),
+                      ),
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: _selectedRating > 0 ? _submitRating : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF0D3B66),
+                          disabledBackgroundColor: Colors.grey[300],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          "Kirim",
+                          style: GoogleFonts.inter(
+                            color: _selectedRating > 0 ? Colors.white : Colors.grey[600],
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -240,7 +308,7 @@ class KosDetailScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${currencyFormatter.format(kos.price)} / bulan',
+                      '${currencyFormatter.format(widget.kos.price)} / bulan',
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -250,44 +318,25 @@ class KosDetailScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Row(
-                children: [
-                  OutlinedButton(
-                    onPressed: _hubungiPemilik,
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      side: const BorderSide(color: Color(0xFF0D3B66)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Icon(Icons.chat, color: Color(0xFF0D3B66)),
+              ElevatedButton(
+                onPressed: () => _pesanSekarang(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF0D3B66),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
                   ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: () => _pesanSekarang(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0D3B66),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      "Pesan Sekarang",
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ],
+                ),
+                child: Text(
+                  "Pesan Sekarang",
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),
