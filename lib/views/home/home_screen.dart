@@ -5,7 +5,6 @@ import '../../providers/kos_provider.dart';
 import '../../widgets/filter_bottom_sheet.dart';
 import '../../widgets/kos_card.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../auth/login_screen.dart';
 import '../auth/role_selection_screen.dart';
 import '../../providers/auth_provider.dart';
 import '../main_navigation.dart';
