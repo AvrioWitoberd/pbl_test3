@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../models/kos.dart';
+import '../data/dummy_data.dart';
 
 class KosProvider with ChangeNotifier {
   List<String> _favoriteKosIds = [];
@@ -30,7 +31,25 @@ class KosProvider with ChangeNotifier {
   }
 
   List<Kos> get filteredKosList {
-    return [];
+    return dummyKosList.where((kos) {
+      final matchesSearch = _searchQuery.isEmpty ||
+          kos.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          kos.location.toLowerCase().contains(_searchQuery.toLowerCase());
+      final matchesLocation = _selectedLocation.isEmpty ||
+          kos.location.toLowerCase().contains(_selectedLocation.toLowerCase());
+      final matchesType = _selectedType.isEmpty || kos.type == _selectedType;
+      final matchesPrice = _selectedPriceRanges.isEmpty ||
+          _selectedPriceRanges.any((range) => _priceMatches(kos.price, range));
+      return matchesSearch && matchesLocation && matchesType && matchesPrice;
+    }).toList();
+  }
+
+  bool _priceMatches(double price, String range) {
+    if (range == '< 500000') return price < 500000;
+    if (range == '500000 - 1000000') return price >= 500000 && price <= 1000000;
+    if (range == '1000000 - 1500000') return price > 1000000 && price <= 1500000;
+    if (range == '1500000 - 2000000') return price > 1500000 && price <= 2000000;
+    return true;
   }
 
   void updateSearchQuery(String query) {
