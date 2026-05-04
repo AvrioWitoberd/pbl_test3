@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../providers/auth_provider.dart';
 import '../auth/role_selection_screen.dart';
-import '../auth/login_screen.dart';
+import '../home/privacy_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class ProfileScreen extends StatelessWidget {
     final authProvider = context.watch<AuthProvider>();
     
     if (!authProvider.isLoggedIn) {
-      return const LoginScreen();
+      return const RoleSelectionScreen();
     }
 
     return Scaffold(
@@ -147,26 +147,44 @@ class ProfileScreen extends StatelessWidget {
                     onTap: () async {
                       final Uri url = Uri.parse(
                           'https://wa.me/6285784649183?text=${Uri.encodeComponent("Halo admin, saya butuh bantuan terkait aplikasi My Kos")}');
-                      if (!await launchUrl(url)) {
-                        debugPrint('Could not launch $url');
-                      }
+                      launchUrl(url, mode: LaunchMode.externalApplication);
                     },
                   ),
                   const Divider(height: 1, indent: 56, endIndent: 16),
                   _buildMenuItem(
                     icon: Icons.privacy_tip_outlined,
                     title: "Kebijakan Privasi",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const PrivacyScreen()),
+                      );
+                    },
                   ),
                   const Divider(height: 1, indent: 56, endIndent: 16),
-                  _buildMenuItem(
-                    icon: Icons.logout_rounded,
-                    title: "Logout",
-                    textColor: Colors.red,
-                    iconColor: Colors.red,
-                    showChevron: false,
-                    onTap: () => _showLogoutConfirmation(context),
-                  ),
+                  if (authProvider.isLoggedIn)
+                    _buildMenuItem(
+                      icon: Icons.logout_rounded,
+                      title: "Logout",
+                      textColor: Colors.red,
+                      iconColor: Colors.red,
+                      showChevron: false,
+                      onTap: () => _showLogoutConfirmation(context),
+                    )
+                  else
+                    _buildMenuItem(
+                      icon: Icons.login_rounded,
+                      title: "Login",
+                      textColor: const Color(0xFF0D3B66),
+                      iconColor: const Color(0xFF0D3B66),
+                      showChevron: true,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const RoleSelectionScreen()),
+                        );
+                      },
+                    ),
                 ],
               ),
             ),

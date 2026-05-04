@@ -4,7 +4,10 @@ import 'package:provider/provider.dart';
 import '../../providers/kos_provider.dart';
 import '../../widgets/filter_bottom_sheet.dart';
 import '../../widgets/kos_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../auth/login_screen.dart';
+import '../auth/role_selection_screen.dart';
+import '../../providers/auth_provider.dart';
 import 'privacy_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -30,9 +33,11 @@ class HomeScreen extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
-              Navigator.pushReplacement(
+              context.read<AuthProvider>().logout();
+              Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                MaterialPageRoute(builder: (_) => const RoleSelectionScreen()),
+                (route) => false,
               );
             },
             child: Text("Keluar", style: GoogleFonts.inter(color: Colors.red)),
@@ -85,37 +90,57 @@ class HomeScreen extends StatelessWidget {
         ),
         leading: const Icon(Icons.home_work_rounded, color: Colors.white),
         actions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
-            onSelected: (value) {
-              if (value == 'pusat_bantuan') {
-                // No action needed yet
-              } else if (value == 'kebijakan_privasi') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const PrivacyScreen()),
-                );
-              } else if (value == 'keluar') {
-                _showLogoutDialog(context);
-              }
+          Consumer<AuthProvider>(
+            builder: (context, auth, _) {
+              return PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert, color: Colors.white),
+                onSelected: (value) async {
+                  if (value == 'pusat_bantuan') {
+                    final Uri url = Uri.parse(
+                        'https://wa.me/6285784649183?text=${Uri.encodeComponent("Halo admin, saya butuh bantuan terkait aplikasi My Kos")}');
+                    launchUrl(url, mode: LaunchMode.externalApplication);
+                  } else if (value == 'kebijakan_privasi') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const PrivacyScreen()),
+                    );
+                  } else if (value == 'keluar') {
+                    _showLogoutDialog(context);
+                  } else if (value == 'login') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const RoleSelectionScreen()),
+                    );
+                  }
+                },
+                itemBuilder: (BuildContext context) => [
+                  const PopupMenuItem(
+                    value: 'pusat_bantuan',
+                    child: Text('Pusat Bantuan'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'kebijakan_privasi',
+                    child: Text('Kebijakan Privasi'),
+                  ),
+                  if (auth.isLoggedIn)
+                    const PopupMenuItem(
+                      value: 'keluar',
+                      child: Text(
+                        'Keluar / Logout',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    )
+                  else
+                    const PopupMenuItem(
+                      value: 'login',
+                      child: Text(
+                        'Login',
+                        style: TextStyle(color: Color(0xFF0D3B66)),
+                      ),
+                    ),
+                ],
+              );
             },
-            itemBuilder: (BuildContext context) => [
-              const PopupMenuItem(
-                value: 'pusat_bantuan',
-                child: Text('Pusat Bantuan'),
-              ),
-              const PopupMenuItem(
-                value: 'kebijakan_privasi',
-                child: Text('Kebijakan Privasi'),
-              ),
-              const PopupMenuItem(
-                value: 'keluar',
-                child: Text(
-                  'Keluar / Logout',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
           ),
         ],
       ),
