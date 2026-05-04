@@ -139,41 +139,42 @@ class BlogScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Card(
+                      child: Container(
                         margin: const EdgeInsets.only(bottom: 16),
-                        elevation: 1,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: Colors.grey.shade200,
-                            width: 1,
-                          ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withAlpha(12),
+                              blurRadius: 10,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ClipRRect(
                               borderRadius: const BorderRadius.horizontal(
-                                left: Radius.circular(12),
+                                left: Radius.circular(14),
                               ),
                               child: Image.network(
                                 blog.imageUrl,
-                                width: 100,
-                                height: 100,
+                                width: 110,
+                                height: 110,
                                 fit: BoxFit.cover,
                                 errorBuilder: (_, __, ___) => Container(
-                                  width: 100,
-                                  height: 100,
-                                  color: Colors.grey,
-                                  child: const Icon(Icons.image),
+                                  width: 110,
+                                  height: 110,
+                                  color: Colors.grey[100],
+                                  child: Icon(Icons.image_outlined, color: Colors.grey[400]),
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 12),
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.all(12),
+                                padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -182,35 +183,34 @@ class BlogScreen extends StatelessWidget {
                                       style: GoogleFonts.inter(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
+                                        height: 1.4,
                                       ),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.category,
-                                          size: 12,
+                                    const SizedBox(height: 10),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                      decoration: BoxDecoration(
+                                        color: Colors.orange.shade50,
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Text(
+                                        blog.category,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 11,
                                           color: Colors.orange.shade800,
+                                          fontWeight: FontWeight.w600,
                                         ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          blog.category,
-                                          style: GoogleFonts.inter(
-                                            fontSize: 12,
-                                            color: Colors.orange.shade800,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                    const SizedBox(height: 4),
+                                    const SizedBox(height: 8),
                                     Text(
                                       blog.date,
                                       style: GoogleFonts.inter(
-                                        fontSize: 10,
-                                        color: Colors.grey,
+                                        fontSize: 11,
+                                        color: Colors.grey[400],
                                       ),
                                     ),
                                   ],

@@ -12,33 +12,29 @@ class ProfileScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: Text(
             "Konfirmasi Logout",
             style: GoogleFonts.inter(fontWeight: FontWeight.bold),
           ),
           content: Text(
             "Apakah anda yakin ingin keluar dari akun?",
-            style: GoogleFonts.inter(),
+            style: GoogleFonts.inter(color: Colors.grey[700]),
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
-              },
+              onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 "Batal",
                 style: GoogleFonts.inter(
                   color: Colors.grey[600],
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop();
                 _handleLogout(context);
               },
               child: Text(
@@ -58,7 +54,6 @@ class ProfileScreen extends StatelessWidget {
   void _handleLogout(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     authProvider.logout();
-
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => const RoleSelectionScreen()),
@@ -69,7 +64,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF7F8FA),
       appBar: AppBar(
         title: Text(
           "Profil Saya",
@@ -85,59 +80,83 @@ class ProfileScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 24),
-            // Avatar
-            Center(
-              child: CircleAvatar(
-                radius: 50,
-                backgroundColor: const Color(0xFF0D3B66).withOpacity(0.1),
-                child: const Icon(
-                  Icons.person,
-                  size: 50,
-                  color: Color(0xFF0D3B66),
-                ),
+            // Header card
+            Container(
+              width: double.infinity,
+              color: Colors.white,
+              padding: const EdgeInsets.fromLTRB(16, 28, 16, 28),
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 48,
+                    backgroundColor: const Color(0xFF0D3B66).withAlpha(25),
+                    child: const Icon(
+                      Icons.person_rounded,
+                      size: 52,
+                      color: Color(0xFF0D3B66),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    "User Dummy",
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "user@gmail.com",
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      color: Colors.grey[500],
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 16),
-            // Username
-            Text(
-              "User Dummy",
-              style: GoogleFonts.inter(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+            // Menu section
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(10),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  _buildMenuItem(
+                    icon: Icons.help_outline_rounded,
+                    title: "Pusat Bantuan",
+                    onTap: () {},
+                  ),
+                  const Divider(height: 1, indent: 56, endIndent: 16),
+                  _buildMenuItem(
+                    icon: Icons.privacy_tip_outlined,
+                    title: "Kebijakan Privasi",
+                    onTap: () {},
+                  ),
+                  const Divider(height: 1, indent: 56, endIndent: 16),
+                  _buildMenuItem(
+                    icon: Icons.logout_rounded,
+                    title: "Logout",
+                    textColor: Colors.red,
+                    iconColor: Colors.red,
+                    showChevron: false,
+                    onTap: () => _showLogoutConfirmation(context),
+                  ),
+                ],
               ),
             ),
-            Text(
-              "user@gmail.com",
-              style: GoogleFonts.inter(fontSize: 14, color: Colors.grey[600]),
-            ),
             const SizedBox(height: 32),
-            // Menus
-            _buildMenuItem(
-              icon: Icons.help_outline,
-              title: "Pusat Bantuan",
-              onTap: () {
-                // Dummy navigation or action
-              },
-            ),
-            const Divider(height: 1),
-            _buildMenuItem(
-              icon: Icons.privacy_tip_outlined,
-              title: "Kebijakan Privasi",
-              onTap: () {
-                // Dummy navigation or action
-              },
-            ),
-            const Divider(height: 1),
-            _buildMenuItem(
-              icon: Icons.logout,
-              title: "Logout",
-              textColor: Colors.red,
-              iconColor: Colors.red,
-              onTap: () => _showLogoutConfirmation(context),
-            ),
-            const Divider(height: 1),
           ],
         ),
       ),
@@ -150,18 +169,30 @@ class ProfileScreen extends StatelessWidget {
     required VoidCallback onTap,
     Color? textColor,
     Color? iconColor,
+    bool showChevron = true,
   }) {
     return ListTile(
-      leading: Icon(icon, color: iconColor ?? const Color(0xFF0D3B66)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      leading: Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: (iconColor ?? const Color(0xFF0D3B66)).withAlpha(18),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, color: iconColor ?? const Color(0xFF0D3B66), size: 20),
+      ),
       title: Text(
         title,
         style: GoogleFonts.inter(
-          fontSize: 16,
+          fontSize: 15,
           fontWeight: FontWeight.w500,
           color: textColor ?? Colors.black87,
         ),
       ),
-      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+      trailing: showChevron
+          ? Icon(Icons.chevron_right_rounded, color: Colors.grey[400])
+          : null,
       onTap: onTap,
     );
   }
