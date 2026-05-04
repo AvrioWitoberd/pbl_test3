@@ -12,12 +12,13 @@ class BlogScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF0D3B66),
         elevation: 0,
+        foregroundColor: Colors.white,
         title: Text(
           "Berita / Blog",
           style: GoogleFonts.inter(
-            color: Colors.black87,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -72,7 +73,7 @@ class BlogScreen extends StatelessWidget {
                           ),
                         ),
                         backgroundColor: Colors.white,
-                        selectedColor: Colors.orange.shade800,
+                        selectedColor: const Color(0xFF0D3B66),
                         onSelected: (_) {
                           provider.updateCategory(cat);
                         },
@@ -193,14 +194,14 @@ class BlogScreen extends StatelessWidget {
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                       decoration: BoxDecoration(
-                                        color: Colors.orange.shade50,
+                                        color: const Color(0xFF0D3B66).withAlpha(18),
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Text(
                                         blog.category,
                                         style: GoogleFonts.inter(
                                           fontSize: 11,
-                                          color: Colors.orange.shade800,
+                                      color: const Color(0xFF0D3B66),
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),

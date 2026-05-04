@@ -73,19 +73,20 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF0D3B66),
         elevation: 0,
+        foregroundColor: Colors.white,
         title: Text(
           "My Kos",
           style: GoogleFonts.inter(
-            color: Colors.black87,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
-        leading: Icon(Icons.home_work_rounded, color: Colors.orange.shade800),
+        leading: const Icon(Icons.home_work_rounded, color: Colors.white),
         actions: [
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: Colors.black87),
+            icon: const Icon(Icons.more_vert, color: Colors.white),
             onSelected: (value) {
               if (value == 'pusat_bantuan') {
                 // No action needed yet
@@ -155,7 +156,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(width: 12),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.orange.shade800,
+                    color: const Color(0xFF0D3B66),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: IconButton(

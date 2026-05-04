@@ -168,7 +168,7 @@ class KosCard extends StatelessWidget {
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Colors.orange[800],
+                        color: const Color(0xFF0D3B66),
                       ),
                     ),
                   ],

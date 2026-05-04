@@ -12,16 +12,17 @@ class BlogDetailScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF0D3B66),
         elevation: 0,
+        foregroundColor: Colors.white,
         title: Text(
           "Blog My Kos",
           style: GoogleFonts.inter(
-            color: Colors.black87,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: const IconThemeData(color: Colors.black87),
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
             icon: const Icon(Icons.share),
@@ -59,14 +60,14 @@ class BlogDetailScreen extends StatelessWidget {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.orange.shade100,
-                          borderRadius: BorderRadius.circular(4),
+                          color: const Color(0xFF0D3B66).withAlpha(20),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           blog.category,
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: Colors.orange.shade800,
+                            color: const Color(0xFF0D3B66),
                             fontWeight: FontWeight.bold,
                           ),
                         ),

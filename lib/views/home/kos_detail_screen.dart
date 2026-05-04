@@ -33,7 +33,7 @@ class KosDetailScreen extends StatelessWidget {
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               "Tutup",
-              style: GoogleFonts.inter(color: Colors.orange.shade800),
+              style: GoogleFonts.inter(color: const Color(0xFF0D3B66)),
             ),
           ),
         ],
@@ -55,13 +55,14 @@ class KosDetailScreen extends StatelessWidget {
         title: Text(
           "Detail Kos",
           style: GoogleFonts.inter(
-            color: Colors.black87,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF0D3B66),
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black87),
+        foregroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -190,7 +191,7 @@ class KosDetailScreen extends StatelessWidget {
                             Icon(
                               Icons.check_circle,
                               size: 16,
-                              color: Colors.orange.shade800,
+                              color: const Color(0xFF0D3B66),
                             ),
                             const SizedBox(width: 6),
                             Text(
@@ -243,7 +244,7 @@ class KosDetailScreen extends StatelessWidget {
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.orange[800],
+                        color: const Color(0xFF0D3B66),
                       ),
                     ),
                   ],
@@ -258,18 +259,18 @@ class KosDetailScreen extends StatelessWidget {
                         horizontal: 16,
                         vertical: 12,
                       ),
-                      side: BorderSide(color: Colors.orange.shade800),
+                      side: const BorderSide(color: Color(0xFF0D3B66)),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: Icon(Icons.chat, color: Colors.orange.shade800),
+                    child: const Icon(Icons.chat, color: Color(0xFF0D3B66)),
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () => _pesanSekarang(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange.shade800,
+                      backgroundColor: const Color(0xFF0D3B66),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,

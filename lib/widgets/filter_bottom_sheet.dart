@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+const Color _primary = Color(0xFF0D3B66);
+
 class FilterBottomSheet extends StatefulWidget {
   final String initialLocation;
   final String initialType;
@@ -75,10 +77,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 style: GoogleFonts.inter(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
               ),
               IconButton(
                 icon: const Icon(Icons.close),
+                color: Colors.grey[600],
                 onPressed: () => Navigator.pop(context),
               ),
             ],
@@ -97,7 +101,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     "Lokasi",
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 15,
+                      color: Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -108,10 +113,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       hintStyle: GoogleFonts.inter(color: Colors.grey),
                       prefixIcon: const Icon(
                         Icons.location_on_outlined,
-                        color: Colors.grey,
+                        color: _primary,
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: _primary),
                       ),
                       contentPadding: const EdgeInsets.symmetric(vertical: 14),
                     ),
@@ -123,7 +133,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     "Tipe Kos",
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 15,
+                      color: Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -136,11 +147,14 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           type,
                           style: GoogleFonts.inter(
                             color: isSelected ? Colors.white : Colors.black87,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                         selected: isSelected,
-                        selectedColor: Colors.orange.shade800,
-                        backgroundColor: Colors.grey.shade200,
+                        selectedColor: _primary,
+                        backgroundColor: Colors.grey.shade100,
                         onSelected: (selected) {
                           setState(() {
                             _selectedType = selected ? type : '';
@@ -156,16 +170,18 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     "Rentang Harga",
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 15,
+                      color: Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Column(
                     children: _priceOptions.map((price) {
                       return CheckboxListTile(
-                        title: Text(price, style: GoogleFonts.inter()),
+                        title: Text(price, style: GoogleFonts.inter(fontSize: 14)),
                         value: _selectedPriceRanges.contains(price),
-                        activeColor: Colors.orange.shade800,
+                        activeColor: _primary,
+                        checkColor: Colors.white,
                         controlAffinity: ListTileControlAffinity.leading,
                         contentPadding: EdgeInsets.zero,
                         onChanged: (bool? value) {
@@ -202,13 +218,17 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
+                    side: const BorderSide(color: _primary),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: Text(
                     "Bersihkan",
-                    style: GoogleFonts.inter(color: Colors.orange.shade800),
+                    style: GoogleFonts.inter(
+                      color: _primary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
@@ -224,7 +244,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange.shade800,
+                    backgroundColor: _primary,
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -232,7 +253,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   ),
                   child: Text(
                     "Terapkan Filter",
-                    style: GoogleFonts.inter(color: Colors.white),
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),

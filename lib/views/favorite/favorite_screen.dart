@@ -13,12 +13,13 @@ class FavoriteScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF0D3B66),
         elevation: 0,
+        foregroundColor: Colors.white,
         title: Text(
           "Kos Favorit Saya",
           style: GoogleFonts.inter(
-            color: Colors.black87,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
